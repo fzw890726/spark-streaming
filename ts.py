@@ -1,0 +1,22 @@
+
+import time
+from pyspark import SparkContext
+from pyspark.streaming import StreamingContext
+import dateutil.parser
+import json
+from pyspark.streaming.kafka import KafkaUtils
+
+# Connecting Streaming data from kafak file producer with Streaming Spark via Queue
+
+
+if __name__ == "__main__":
+    sc = SparkContext(appName="PythonStreamingQueueStream")
+    ssc = StreamingContext(sc, 10)
+    zkQuorum = "localhost:2181"
+    topic = "topic1"
+    reviews = KafkaUtils.createStream(ssc, zkQuorum, "PythonStreamingQueueStream", {topic: 1})
+    #data process, i.e. ml process
+    reviews.pprint()	
+    ssc.start()
+    time.sleep(100)
+    ssc.stop(stopSparkContext=True, stopGraceFully=True)
